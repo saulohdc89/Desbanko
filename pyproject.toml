@@ -7,8 +7,10 @@ authors = [
 ]
 requires-python = ">=3.14"
 dependencies = [
-    "flask"
+    "flask",
+    "flask-sqlalchemy"
 ]
+package-mode = false  # <--- ADICIONE ESTA LINHA
 
 
 [build-system]
