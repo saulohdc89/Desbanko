@@ -8,7 +8,7 @@ import click
 import sqlalchemy as sa
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
-
+from sqlalchemy.orm import DeclarativeBase
 
 class Base(DeclarativeBase):
   pass
@@ -23,7 +23,7 @@ class User(db.Model):
     username: Mapped[str] = mapped_column(unique=True, nullable= False)
 
     def __repr__(self) -> str:
-         return f"User(id={self.id!r}, username={self.username!r})"
+         return f"User(id={self.id!r}, username={self.username!r},active={self.active!r})"
    
 
 class Post:
@@ -48,7 +48,7 @@ def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',
-        SQLALCHEMY_DATABASE_URI= "sqlite:///desbanko.sqlite",
+        SQLALCHEMY_DATABASE_URI= "sqlite:///blog.sqlite",
     )
 
     if test_config is None:
@@ -62,5 +62,9 @@ def create_app(test_config=None):
     app.cli.add_command(init_db_command)
     #Initializing extensions
     db.init_app(app)
+
+    #register bluesprints
+    from src.controllers import user,post
+    app.register_blueprint(user.app)
 
     return app
